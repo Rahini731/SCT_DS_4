@@ -1,0 +1,43 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from google.colab import files
+
+uploaded = files.upload()
+df = pd.read_csv("dataset.csv")
+
+df['Accident Date'] = pd.to_datetime(df['Accident Date'], dayfirst=True, errors='coerce')
+df['Hour'] = df['Time (24hr)'].astype(str).str.zfill(4).str[:2].astype(int)
+df['Day'] = df['Accident Date'].dt.day_name()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Hour', data=df)
+plt.title("Accidents by Time of Day")
+plt.xlabel("Hour of Day")
+plt.ylabel("Number of Accidents")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Road Surface', data=df)
+plt.title("Accidents by Road Surface Condition")
+plt.xlabel("Road Surface Code")
+plt.ylabel("Number of Accidents")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Weather Conditions', data=df)
+plt.title("Accidents by Weather Conditions")
+plt.xlabel("Weather Condition Code")
+plt.ylabel("Number of Accidents")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='Grid Ref: Easting', y='Grid Ref: Northing', data=df, size='Number of Vehicles', alpha=0.6)
+plt.title("Accident Hotspots")
+plt.xlabel("Easting")
+plt.ylabel("Northing")
+plt.tight_layout()
+plt.show()
